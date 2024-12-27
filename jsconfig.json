@@ -1,0 +1,13 @@
+{
+"compilerOptions": {
+        "module": "commonjs",
+        "target": "ES6", // Specify the JavaScript version (optional)
+        "baseUrl": "./src", // Root folder for absolute imports
+        "paths": {
+        "@config/*": ["config/*"], // Alias @config to src/config
+        "@utils/*": ["utils/*"]    // Example of an alias for utilities
+    }
+},
+"include": ["src/**/*"], // Include all files in the src folder
+"exclude": ["node_modules"] // Exclude node_modules
+  }
