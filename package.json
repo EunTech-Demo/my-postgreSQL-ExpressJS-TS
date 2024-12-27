@@ -1,16 +1,15 @@
 {
   "name": "sample-crud-postgres",
   "version": "1.0.0",
-  "main": "src/app.ts",
+  "main": "src/app.js",
   "author": "eunille villegas (chreuseun)",
   "license": "MIT",
   "scripts": {
-    "production": "npx tsc; node dist/app.js",
+    "start": "node src/app.js",
     "dev": "nodemon src/app.ts"
   },
   "dependencies": {
     "express": "^4.21.2",
-    "pg": "^8.13.1",
-    "postgres": "^3.4.5"
+    "pg": "^8.13.1"
   }
 }
