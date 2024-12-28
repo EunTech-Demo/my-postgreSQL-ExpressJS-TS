@@ -6,7 +6,7 @@ const executeSQL = async (sql: string, params: any[] = []) => {
 
     return response;
   } catch (error) {
-    return `${error}`;
+    throw new Error(error?.message || error);
   }
 };
 

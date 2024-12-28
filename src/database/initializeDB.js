@@ -1,11 +1,11 @@
-import pg, { ClientConfig } from "pg";
+import pg from "pg";
 
-const POSTGRESQL_SAMPLE_CRUD_DB: ClientConfig = {
+const POSTGRESQL_SAMPLE_CRUD_DB = {
   host: "127.0.0.1",
   port: 5433,
   database: "sample-crud",
-  user: "postgres",
-  password: "root",
+  user: "developer_all_access",
+  password: "devroot",
 };
 
 const initializeDB = () => {
