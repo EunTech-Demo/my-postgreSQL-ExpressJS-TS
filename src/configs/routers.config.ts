@@ -9,3 +9,7 @@ export const ROUTES_CONFIG = {
     },
   },
 };
+
+export const PATH_PREFIXES = {
+  API: "/api",
+};
