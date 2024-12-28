@@ -1,5 +1,4 @@
 import { executeSQLQuery } from "@/database/operations";
-import executeSQL from "@/database/operations/executeSQLQuery";
 import { Request, Response } from "express";
 
 const getAllUsers = async (req: Request, res: Response) => {
