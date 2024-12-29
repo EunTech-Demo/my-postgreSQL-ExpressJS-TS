@@ -1,9 +1,7 @@
 import { Router } from "express";
 
 import { ROUTES_CONFIG } from "@/configs/routers.config";
-import { createUser, getAllUsers } from "@/handlers/users";
-import { responseJSONTemplate } from "@/utils/api";
-import { usersCreate } from "./usersRoutes";
+import { usersCreate, usersGetAll } from "./usersRoutes";
 
 const usersRouter = Router();
 const { USERS } = ROUTES_CONFIG;
@@ -17,7 +15,7 @@ const usersRouterMiddleware = (req, _, next) => {
 
 usersRouter.use(usersRouterMiddleware);
 
-usersRouter.get(paths.GET_ALL, getAllUsers);
+usersRouter.get(paths.GET_ALL, usersGetAll);
 usersRouter.get(paths.GET_BY_ID, (req, res) => {
   res.send("get user by id: " + req?.params?.id || "- NO ID - ");
 });
