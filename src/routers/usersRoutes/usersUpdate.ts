@@ -1,6 +1,7 @@
 import executeSQLQuery from "@/database/operations/executeSQLQuery";
 import { IUpdateUserBody } from "@/interfaces/users.interface";
 import { responseJSONTemplate } from "@/utils/api";
+import { encryptPassword } from "@/utils/users";
 import { Response, Request } from "express";
 
 const SQL_UPDATE_USER_BY_ID = `
@@ -24,11 +25,15 @@ const usersUpdate = async (req: Request, res: Response) => {
   try {
     if (!userID) {
       throw new Error("No User ID found");
+    } else if (!password) {
+      throw new Error("No password found");
     }
+
+    const encryptedPassword = encryptPassword(password);
 
     const result = (await executeSQLQuery(SQL_UPDATE_USER_BY_ID, [
       username,
-      password,
+      encryptedPassword,
       isActive,
       userID,
     ])) as {
