@@ -1,12 +1,10 @@
 import { createUser } from "@/handlers/users";
+import { ICreateUserBody } from "@/interfaces/users.interface";
 import { responseJSONTemplate } from "@/utils/api";
 import { Response, Request } from "express";
 
 const usersCreate = async (req: Request, res: Response) => {
-  const { username, password } = req.body as {
-    username: string;
-    password: string;
-  };
+  const { username, password } = req.body as ICreateUserBody;
 
   try {
     const response = (await createUser({ password, username })) as {
