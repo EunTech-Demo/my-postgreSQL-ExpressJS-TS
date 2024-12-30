@@ -1,9 +1,11 @@
 import { getAllUsers } from "@/handlers/users";
+import { IRouteGetAllUsersQuery } from "@/interfaces/users.interface";
 import { Request, Response } from "express";
 
 const usersGetAll = async (req: Request, res: Response) => {
   try {
-    const usersList = await getAllUsers();
+    const { username } = req.query as IRouteGetAllUsersQuery;
+    const usersList = await getAllUsers({ username });
 
     res.json({
       success: true,

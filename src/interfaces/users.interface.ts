@@ -16,3 +16,7 @@ export interface IUpdateUserBody {
   password: string;
   isActive: boolean;
 }
+
+export interface IRouteGetAllUsersQuery {
+  username?: string;
+}
