@@ -26,18 +26,28 @@ const usersUpdate = async (req: Request, res: Response) => {
       throw new Error("No User ID found");
     }
 
-    const result = await executeSQLQuery(SQL_UPDATE_USER_BY_ID, [
+    const result = (await executeSQLQuery(SQL_UPDATE_USER_BY_ID, [
       username,
       password,
       isActive,
       userID,
-    ]);
+    ])) as {
+      rows: { id: number }[];
+    };
+
+    const updatedID = result.rows?.[0]?.id || null;
+
+    if (!updatedID) {
+      throw new Error("No Update User Updated ID found");
+    }
 
     res.json(
       responseJSONTemplate({
         success: true,
         error: null,
-        data: result,
+        data: {
+          updatedID,
+        },
         message: `User Updated Successfully`,
         status: 200,
       })
