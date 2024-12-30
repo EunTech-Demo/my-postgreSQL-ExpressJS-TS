@@ -1,7 +1,8 @@
+import { DEFAULT_SCHEMA_NAME } from "@/configs/database";
 import { executeSQLQuery } from "@/database/operations";
 
 const SQL_INSERT_NEW_USER = `
-INSERT INTO crud_system.users(
+INSERT INTO ${DEFAULT_SCHEMA_NAME}.users(
 	username,
 	password
 )
