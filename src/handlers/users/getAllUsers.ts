@@ -1,3 +1,4 @@
+import { DEFAULT_SCHEMA_NAME } from "@/configs/database";
 import { executeSQLQuery } from "@/database/operations";
 import { IUserDTO } from "@/interfaces/users.interface";
 import { generateWildcardSearch } from "@/utils/sql";
@@ -5,7 +6,7 @@ import { generateWildcardSearch } from "@/utils/sql";
 const SQL_GET_ALL_USERS = `
 SELECT *
 
-FROM crud_system.users
+FROM ${DEFAULT_SCHEMA_NAME}.users
 
 WHERE 
   $1::TEXT IS NULL OR $1 = '' OR username LIKE $1::TEXT

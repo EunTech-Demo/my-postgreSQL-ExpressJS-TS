@@ -1,3 +1,4 @@
+import { DEFAULT_SCHEMA_NAME } from "@/configs/database";
 import executeSQLQuery from "@/database/operations/executeSQLQuery";
 import { IUpdateUserBody } from "@/interfaces/users.interface";
 import { responseJSONTemplate } from "@/utils/api";
@@ -5,7 +6,7 @@ import { encryptPassword } from "@/utils/users";
 import { Response, Request } from "express";
 
 const SQL_UPDATE_USER_BY_ID = `
-UPDATE crud_system.users
+UPDATE ${DEFAULT_SCHEMA_NAME}.users
 
 SET 
 username=$1,
