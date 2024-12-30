@@ -1,12 +1,5 @@
 import { executeSQLQuery } from "@/database/operations";
-
-export interface IUserDTO {
-  id: number | string;
-  username: string;
-  password: string;
-  created_at: string;
-  updated_at: string | null;
-}
+import { IUserDTO } from "@/interfaces/users.interface";
 
 const getAllUsers = async () => {
   const response = await executeSQLQuery("SELECT * FROM crud_system.users");

@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import { ROUTES_CONFIG } from "@/configs/routers.config";
-import { usersCreate, usersGetAll } from "./usersRoutes";
+import { usersCreate, usersGetAll, usersUpdate } from "./usersRoutes";
 
 const usersRouter = Router();
 const { USERS } = ROUTES_CONFIG;
@@ -20,10 +20,10 @@ usersRouter.get(paths.GET_BY_ID, (req, res) => {
   res.send("get user by id: " + req?.params?.id || "- NO ID - ");
 });
 
+// create new user with username & password
 usersRouter.post(paths.CREATE_USER, usersCreate);
 
-usersRouter.put(paths.UPDATE_USER_BY_ID, (_, res) => {
-  res.send("update user now");
-});
+// update user by id
+usersRouter.put(paths.UPDATE_USER_BY_ID, usersUpdate);
 
 export default usersRouter;
