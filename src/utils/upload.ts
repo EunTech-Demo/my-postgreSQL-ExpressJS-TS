@@ -1,6 +1,10 @@
 import multer from "multer";
 
-const fileUploader = (uploadPath: string, allowFileTypes: string[]) => {
+const fileUploader = (
+  uploadPath: string,
+  allowFileTypes: string[],
+  errorMessage?: string
+) => {
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
       cb(null, uploadPath); // Ensure this folder exists
@@ -17,7 +21,7 @@ const fileUploader = (uploadPath: string, allowFileTypes: string[]) => {
     if (allowedTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error("Only image files are allowed!"), false);
+      cb(new Error(errorMessage || "Only image files are allowed!"), false);
     }
   };
 
