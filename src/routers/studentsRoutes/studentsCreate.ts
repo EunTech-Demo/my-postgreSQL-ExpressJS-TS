@@ -6,11 +6,15 @@ import { IInsertStudentBody } from "@/interfaces/students.interface";
 import { responseJSONTemplate } from "@/utils/api";
 import { encryptPassword } from "@/utils/auth";
 
+const IMAGE_BASE_URL = `/files/images/students/`;
+
 const studentsCreate = async (req: Request, res: Response) => {
   const { firstname, lastname, middlename, username, password, is_active } =
     req.body as IInsertStudentBody;
 
   try {
+    const filename = req?.file?.filename;
+
     const responseCreateStudent = (await createStudent({
       reference_id: generateStudentUUID(),
       firstname,
@@ -19,6 +23,7 @@ const studentsCreate = async (req: Request, res: Response) => {
       username,
       password: encryptPassword(password),
       is_active,
+      image_url: `${IMAGE_BASE_URL}${filename}`,
     })) as {
       rows: { id: number }[];
     };

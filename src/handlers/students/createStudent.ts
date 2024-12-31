@@ -10,7 +10,8 @@ INSERT INTO lms_system.students(
   middlename,
   username, 
   password, 
-  is_active
+  is_active,
+  image_url
 )
 VALUES (
   $1,
@@ -19,7 +20,8 @@ VALUES (
   $4,
   $5,
   $6,
-  $7
+  $7,
+  $8
 )
   
 RETURNING id
@@ -36,6 +38,7 @@ const createStudent: <T>(
     username,
     password,
     is_active,
+    image_url,
   } = params;
 
   const result = await executeSQLQuery(SQL, [
@@ -46,6 +49,7 @@ const createStudent: <T>(
     username,
     password,
     is_active,
+    image_url,
   ]);
 
   return result;
