@@ -7,14 +7,18 @@ import usersRouter from "./routers/usersRouter";
 import studentsRouter from "./routers/studentsRouter";
 
 import { ROUTES_CONFIG, PATH_PREFIXES } from "./configs/routers.config";
+import {
+  PORT,
+  FILE_PATH,
+  STUDENT_IMG_PATH,
+  ALLOWED_IMAGE_TYPES,
+} from "./configs/server";
 
 const app = express();
-const PORT = process?.env?.PORT || 3002;
-const FILE_PATH = path.join(__dirname, "public");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, "public/images/students");
+    const uploadPath = STUDENT_IMG_PATH;
     cb(null, uploadPath); // Ensure this folder exists
   },
   filename: (req, file, cb) => {
@@ -25,7 +29,7 @@ const storage = multer.diskStorage({
 
 // File filter for images only
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+  const allowedTypes = ALLOWED_IMAGE_TYPES;
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
@@ -60,10 +64,7 @@ app.post("/upload", upload.single("image"), (req: Request, res: Response) => {
 
   res.status(200).json({
     message: "File uploaded successfully!",
-
-    // http://localhost:3002/files/images/students/1735653821948-eweqee.jpg
     filePath: `http://127.0.0.1:${PORT}/files/images/students/${req.file.filename}`,
-    ///`/files/uploads/${req.file.filename}`,
   });
 });
 
