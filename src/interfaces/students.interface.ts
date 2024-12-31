@@ -6,6 +6,7 @@ export interface IInsertNewStudent {
   username: string;
   password: string;
   is_active: boolean;
+  image_url: string;
 }
 
 export interface IInsertStudentBody {
@@ -15,4 +16,5 @@ export interface IInsertStudentBody {
   username: string;
   password: string;
   is_active: boolean;
+  image_file: string;
 }
