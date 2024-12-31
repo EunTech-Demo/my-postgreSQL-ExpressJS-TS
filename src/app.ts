@@ -2,6 +2,8 @@ import express from "express";
 import bodyParser from "body-parser";
 
 import usersRouter from "./routers/usersRouter";
+import studentsRouter from "./routers/studentsRouter";
+
 import { ROUTES_CONFIG, PATH_PREFIXES } from "./configs/routers.config";
 
 const app = express();
@@ -17,6 +19,10 @@ app.get("/ping", (_, res) => {
 
 // /api
 app.use(`${PATH_PREFIXES.API}${ROUTES_CONFIG.USERS.baseURL}`, usersRouter);
+app.use(
+  `${PATH_PREFIXES.API}${ROUTES_CONFIG.STUDENTS.baseURL}`,
+  studentsRouter
+);
 
 app.listen(PORT, () => {
   console.log(`[server] Application is listening on port ${PORT}`);
