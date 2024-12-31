@@ -1,2 +1,8 @@
 /node_modules
 /dist
+
+
+# images for serving
+/lms_system
+/src/public
+/public

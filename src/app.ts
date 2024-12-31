@@ -1,5 +1,7 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
+import path from "path";
+import multer from "multer";
 
 import usersRouter from "./routers/usersRouter";
 import studentsRouter from "./routers/studentsRouter";
@@ -8,6 +10,33 @@ import { ROUTES_CONFIG, PATH_PREFIXES } from "./configs/routers.config";
 
 const app = express();
 const PORT = process?.env?.PORT || 3002;
+const FILE_PATH = path.join(__dirname, "public");
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadPath = path.join(__dirname, "public/images/students");
+    cb(null, uploadPath); // Ensure this folder exists
+  },
+  filename: (req, file, cb) => {
+    // Save the file with its original name or customize it
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+
+// File filter for images only
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only image files are allowed!"), false);
+  }
+};
+
+const upload = multer({ storage, fileFilter });
+
+// access files via URL : http://localhost:3002/files/images/students/????.jpg
+app.use("/files", express.static(FILE_PATH));
 
 // Middle wares
 app.use(bodyParser.json());
@@ -24,6 +53,21 @@ app.use(
   studentsRouter
 );
 
+app.post("/upload", upload.single("image"), (req: Request, res: Response) => {
+  if (!req.file) {
+    res.status(400).json({ message: "No file uploaded or invalid file type." });
+  }
+
+  res.status(200).json({
+    message: "File uploaded successfully!",
+
+    // http://localhost:3002/files/images/students/1735653821948-eweqee.jpg
+    filePath: `http://127.0.0.1:${PORT}/files/images/students/${req.file.filename}`,
+    ///`/files/uploads/${req.file.filename}`,
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`[server] Application is listening on port ${PORT}`);
+  console.log('[Server] uploads are located in "' + FILE_PATH + '"');
 });
