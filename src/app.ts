@@ -59,8 +59,9 @@ app.use(
 
 app.post(
   "/upload",
-  fileUploader(STUDENT_IMG_PATH, ALLOWED_IMAGE_TYPES).single("image"),
+  fileUploader(STUDENT_IMG_PATH, ALLOWED_IMAGE_TYPES).single("student_image"),
   (req: Request, res: Response) => {
+    console.log(" student_info: ", req.body);
     if (!req.file) {
       res
         .status(400)
@@ -71,6 +72,26 @@ app.post(
       message: "File uploaded successfully!",
       filePath: `http://127.0.0.1:${PORT}/files/images/students/${req.file.filename}`,
     });
+  }
+);
+
+app.get(
+  "/test1",
+  (_, res, next) => {
+    console.log("-- MIDDLEWARE_1");
+    next();
+  },
+  (_, res, next) => {
+    console.log("-- MIDDLEWARE_2");
+    next();
+  },
+  (_, res, next) => {
+    console.log("-- MIDDLEWARE_3");
+    next();
+  },
+  (_, res) => {
+    console.log("-- MIDDLEWARE_4: ", _.body);
+    res.send("--- JJ");
   }
 );
 
