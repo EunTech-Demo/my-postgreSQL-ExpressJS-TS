@@ -2,7 +2,7 @@ import { DEFAULT_SCHEMA_NAME } from "@/configs/database";
 import executeSQLQuery from "@/database/operations/executeSQLQuery";
 import { IUpdateUserBody } from "@/interfaces/users.interface";
 import { responseJSONTemplate } from "@/utils/api";
-import { encryptPassword } from "@/utils/users";
+import { encryptPassword } from "@/utils/auth";
 import { Response, Request } from "express";
 
 const SQL_UPDATE_USER_BY_ID = `

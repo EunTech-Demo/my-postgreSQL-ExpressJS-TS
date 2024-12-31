@@ -1,6 +1,6 @@
 import { DEFAULT_SCHEMA_NAME } from "@/configs/database";
 import { executeSQLQuery } from "@/database/operations";
-import { encryptPassword } from "@/utils/users";
+import { encryptPassword } from "@/utils/auth";
 
 const SQL_INSERT_NEW_USER = `
 INSERT INTO ${DEFAULT_SCHEMA_NAME}.users(
