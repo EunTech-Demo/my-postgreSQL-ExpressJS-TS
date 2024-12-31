@@ -5,14 +5,14 @@ import multer from "multer";
 
 import usersRouter from "./routers/usersRouter";
 import studentsRouter from "./routers/studentsRouter";
-
-import { ROUTES_CONFIG, PATH_PREFIXES } from "./configs/routers.config";
+import { ROUTES_CONFIG, PATH_PREFIXES } from "@/configs/routers.config";
 import {
   PORT,
   FILE_PATH,
   STUDENT_IMG_PATH,
   ALLOWED_IMAGE_TYPES,
-} from "./configs/server";
+} from "@/server.config";
+import { fileUploader } from "./utils/upload";
 
 const app = express();
 
@@ -57,16 +57,22 @@ app.use(
   studentsRouter
 );
 
-app.post("/upload", upload.single("image"), (req: Request, res: Response) => {
-  if (!req.file) {
-    res.status(400).json({ message: "No file uploaded or invalid file type." });
-  }
+app.post(
+  "/upload",
+  fileUploader(STUDENT_IMG_PATH, ALLOWED_IMAGE_TYPES).single("image"),
+  (req: Request, res: Response) => {
+    if (!req.file) {
+      res
+        .status(400)
+        .json({ message: "No file uploaded or invalid file type." });
+    }
 
-  res.status(200).json({
-    message: "File uploaded successfully!",
-    filePath: `http://127.0.0.1:${PORT}/files/images/students/${req.file.filename}`,
-  });
-});
+    res.status(200).json({
+      message: "File uploaded successfully!",
+      filePath: `http://127.0.0.1:${PORT}/files/images/students/${req.file.filename}`,
+    });
+  }
+);
 
 app.listen(PORT, () => {
   console.log(`[server] Application is listening on port ${PORT}`);
