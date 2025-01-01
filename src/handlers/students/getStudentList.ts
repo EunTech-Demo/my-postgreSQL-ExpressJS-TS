@@ -1,4 +1,6 @@
+import { DEFAULT_SCHEMA_NAME } from "@/configs/database";
 import { executeSQLQuery } from "@/database/operations";
+import { generateWildcardSearch } from "@/utils/sql";
 
 const SQL = `SELECT 
     id,
@@ -9,15 +11,19 @@ const SQL = `SELECT
     lastname,
     middlename
 
-FROM lms_system. students
+FROM ${DEFAULT_SCHEMA_NAME}.students
 
 
 WHERE
-    $1::TEXT IS NULL OR $1 = '' OR lastname LIKE $1::TEXT;
+  $1::TEXT IS NULL OR $1 = '' OR LOWER(lastname) LIKE LOWER($1::TEXT);
 `;
 
-const getStudentList = async () => {
-  const response = await executeSQLQuery(SQL, []);
+const getStudentList = async (arg0: { lastname?: string }) => {
+  const { lastname } = arg0;
+
+  const response = await executeSQLQuery(SQL, [
+    generateWildcardSearch(lastname),
+  ]);
 
   return response;
 };
