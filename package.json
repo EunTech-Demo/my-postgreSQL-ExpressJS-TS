@@ -9,7 +9,7 @@
     "dev": "nodemon src/app.ts",
     "build": "npx tsc && tsc-alias",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "tsc && tsc-alias && node dist/app.js"
+    "deploy": "tsc && tsc-alias && pm2 start dist/app.js --name pg-express"
   },
   "dependencies": {
     "@types/pg": "^8.11.10",
