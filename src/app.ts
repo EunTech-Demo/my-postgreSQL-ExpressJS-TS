@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config(); // This will load environment variables from the .env file
 
-import express from "express";
+import express, { Request, Response } from "express";
 import compression from "compression";
 
 import usersRouter from "./routers/usersRouter";
@@ -37,6 +37,9 @@ const runServer = () => {
   // Serving static file , such as images in order to access the uploaded files
   defaultStaticFilesServerMiddleware(app);
 
+  app.get("/ping", (_: Request, res: Response) => {
+    res.json({ message: "pong" });
+  });
   app.use(`${PATH_PREFIXES.API}${ROUTES_CONFIG.USERS.baseURL}`, usersRouter);
   app.use(
     `${PATH_PREFIXES.API}${ROUTES_CONFIG.STUDENTS.baseURL}`,
@@ -45,9 +48,11 @@ const runServer = () => {
 
   app.use(defaultErrorMiddleware);
 
-  app.listen(PORT, () => {
+  app.listen(PORT, process?.env?.HOST, () => {
     console.log("[Server] Environment:", process.env.NODE_ENV);
-    console.log(`[Server] Application is listening on port ${PORT}`);
+    console.log(
+      `[Server] Application is listening on port ${process?.env?.HOST}:${PORT}`
+    );
     console.log(`[Server] Uploads are located in ${FILE_PATH}`);
   });
 };
