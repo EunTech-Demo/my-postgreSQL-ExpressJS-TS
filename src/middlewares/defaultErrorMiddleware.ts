@@ -23,7 +23,7 @@ const defaultErrorMiddleware = (
       data: null,
       message: null,
       status: statusCode,
-      ...(process.env.NODE_ENV !== "production" && { stack: err.stack }), // Include stack trace in non-production
+      ...(process.env.NODE_ENV !== "production" && { stack: err.stack }),
     }),
   });
 };
