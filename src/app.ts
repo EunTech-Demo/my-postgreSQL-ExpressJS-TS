@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config(); // This will load environment variables from the .env file
 
 import express from "express";
+import compression from "compression";
 
 import usersRouter from "./routers/usersRouter";
 import studentsRouter from "./routers/studentsRouter";
@@ -28,6 +29,7 @@ import defaultInitialMiddleware from "./middlewares/defaultInitialMiddleware";
  */
 const runServer = () => {
   const app = express();
+  app.use(compression());
 
   // Initial middlewares
   defaultInitialMiddleware(app);

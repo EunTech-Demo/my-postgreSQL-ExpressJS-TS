@@ -15,7 +15,7 @@
     }
   },
   "lib": ["es2016"],
-  "include": ["./src/**/*", "./src/**/*.json", "./devSetup/**/*"],
+  "include": ["./src/**/*", "./src/**/*.json"],
   "exclude": ["node_modules", "dist"],
   "ts-node": {
     "require": ["tsconfig-paths/register"]
