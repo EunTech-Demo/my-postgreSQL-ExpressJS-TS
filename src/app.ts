@@ -1,39 +1,49 @@
 import express from "express";
-import bodyParser from "body-parser";
 
 import usersRouter from "./routers/usersRouter";
 import studentsRouter from "./routers/studentsRouter";
 import { ROUTES_CONFIG, PATH_PREFIXES } from "@/configs/routers.config";
 import { PORT, FILE_PATH } from "@/server.config";
 import defaultErrorMiddleware from "@/middlewares/defaultErrorMiddleware";
+import defaultStaticFilesServerMiddleware from "./middlewares/defaultStaticFilesServerMiddleware";
+import defaultInitialMiddleware from "./middlewares/defaultInitialMiddleware";
 
-const app = express();
+/**
+ * Sets up the Express server and starts listening to the configured port.
+ *
+ * This function applies the following middlewares to the Express app:
+ *
+ * 1. Initial middlewares, including BodyParser and CORS.
+ * 2. Serving static files from the `FILE_PATH` directory.
+ * 3. Users router from `./routers/usersRouter`.
+ * 4. Students router from `./routers/studentsRouter`.
+ * 5. Default error middleware from `./middlewares/defaultErrorMiddleware`.
+ *
+ * Once all the middlewares are applied, it starts listening to the configured port.
+ *
+ * @returns {void}
+ */
+const runServer = () => {
+  const app = express();
 
-// access files via URL : http://localhost:3002/files/images/students/????.jpg
-app.use("/files", (_, __, next) => {
-  console.log("[Static Files] accessing files:", _.url);
-  next();
-});
-app.use("/files", express.static(FILE_PATH));
+  // Initial middlewares
+  defaultInitialMiddleware(app);
 
-// Middle wares
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+  // Serving static file , such as images in order to access the uploaded files
+  defaultStaticFilesServerMiddleware(app);
 
-/*
--- PATHS: 
-  USERS TABLE -> /api/users
-  STUDENTS TABLE -> /api/students
-*/
-app.use(`${PATH_PREFIXES.API}${ROUTES_CONFIG.USERS.baseURL}`, usersRouter);
-app.use(
-  `${PATH_PREFIXES.API}${ROUTES_CONFIG.STUDENTS.baseURL}`,
-  studentsRouter
-);
+  app.use(`${PATH_PREFIXES.API}${ROUTES_CONFIG.USERS.baseURL}`, usersRouter);
+  app.use(
+    `${PATH_PREFIXES.API}${ROUTES_CONFIG.STUDENTS.baseURL}`,
+    studentsRouter
+  );
 
-app.use(defaultErrorMiddleware);
+  app.use(defaultErrorMiddleware);
 
-app.listen(PORT, () => {
-  console.log(`[Server] Application is listening on port ${PORT}`);
-  console.log(`[Server] Uploads are located in ${FILE_PATH}`);
-});
+  app.listen(PORT, () => {
+    console.log(`[Server] Application is listening on port ${PORT}`);
+    console.log(`[Server] Uploads are located in ${FILE_PATH}`);
+  });
+};
+
+runServer();
