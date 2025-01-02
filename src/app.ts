@@ -41,6 +41,7 @@ const runServer = () => {
   app.use(defaultErrorMiddleware);
 
   app.listen(PORT, () => {
+    console.log("[Server] Environment:", process.env.NODE_ENV);
     console.log(`[Server] Application is listening on port ${PORT}`);
     console.log(`[Server] Uploads are located in ${FILE_PATH}`);
   });
