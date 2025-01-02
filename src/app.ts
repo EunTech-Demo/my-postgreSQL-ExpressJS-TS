@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config(); // This will load environment variables from the .env file
 
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import compression from "compression";
 
 import usersRouter from "./routers/usersRouter";
@@ -40,6 +40,11 @@ const runServer = () => {
   app.get("/ping", (_: Request, res: Response) => {
     res.json({ message: "pong" });
   });
+
+  app.get("/pingX", (_: Request, res: Response, next: NextFunction) => {
+    next("ping error");
+  });
+
   app.use(`${PATH_PREFIXES.API}${ROUTES_CONFIG.USERS.baseURL}`, usersRouter);
   app.use(
     `${PATH_PREFIXES.API}${ROUTES_CONFIG.STUDENTS.baseURL}`,

@@ -1,7 +1,12 @@
 import { responseJSONTemplate } from "@/utils/api";
 import { NextFunction, Response, Request } from "express";
 
-const defaultErrorMiddleware = (err: any, req: Request, res: Response) => {
+const defaultErrorMiddleware = (
+  err: any,
+  _req: Request,
+  res: Response,
+  _next: any
+) => {
   console.error(`[ERROR: defaultErrorMiddleware] ${err}`);
 
   const statusCode = err.status || 500;
