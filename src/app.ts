@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config(); // This will load environment variables from the .env file
+
 import express from "express";
 
 import usersRouter from "./routers/usersRouter";
