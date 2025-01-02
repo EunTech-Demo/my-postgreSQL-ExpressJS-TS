@@ -1,21 +1,13 @@
 import { responseJSONTemplate } from "@/utils/api";
 import { NextFunction, Response, Request } from "express";
 
-const defaultErrorMiddleware = (
-  err: {
-    status: number;
-    message: string;
-    stack: string;
-  },
-  _: Request,
-  res: Response
-) => {
+const defaultErrorMiddleware = (err: any, req: Request, res: Response) => {
   console.error(`[ERROR: defaultErrorMiddleware] ${err}`);
 
   const statusCode = err.status || 500;
   const message = err.message || "Internal Server Error";
 
-  res.status(statusCode).json({
+  res.json({
     ...responseJSONTemplate({
       success: false,
       error: message,
