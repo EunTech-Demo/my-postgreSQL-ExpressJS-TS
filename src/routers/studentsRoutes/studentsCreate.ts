@@ -5,16 +5,14 @@ import { generateStudentUUID } from "@/utils/students";
 import { IInsertStudentBody } from "@/interfaces/students.interface";
 import { responseJSONTemplate } from "@/utils/api";
 import { encryptPassword } from "@/utils/auth";
-
-const IMAGE_BASE_URL = `/files/images/students/`;
+import { generateFileNameFromRequest } from "@/utils/files";
+import { STUDENT_IMAGE_BASE_URL } from "@/server.config";
 
 const studentsCreate = async (req: Request, res: Response) => {
   const { firstname, lastname, middlename, username, password, is_active } =
     req.body as IInsertStudentBody;
 
   try {
-    const filename = req?.file?.filename;
-
     const responseCreateStudent = (await createStudent({
       reference_id: generateStudentUUID(),
       firstname,
@@ -23,7 +21,10 @@ const studentsCreate = async (req: Request, res: Response) => {
       username,
       password: encryptPassword(password),
       is_active,
-      image_url: `${IMAGE_BASE_URL}${filename}`,
+      image_url: generateFileNameFromRequest({
+        req,
+        baseURL: STUDENT_IMAGE_BASE_URL,
+      }),
     })) as {
       rows: { id: number }[];
     };

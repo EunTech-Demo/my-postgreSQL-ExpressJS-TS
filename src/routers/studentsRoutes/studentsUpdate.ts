@@ -1,12 +1,20 @@
 import { updateStudent } from "@/handlers/students";
 import { IUpdateStudentBody } from "@/interfaces/students.interface";
-import { ALLOWED_IMAGE_TYPES, STUDENT_IMG_PATH } from "@/server.config";
+import {
+  ALLOWED_IMAGE_TYPES,
+  STUDENT_IMAGE_BASE_URL,
+  STUDENT_IMG_PATH,
+} from "@/server.config";
 import { responseJSONTemplate } from "@/utils/api";
 import { encryptPassword } from "@/utils/auth";
+import {
+  generateFileNameFromRequest,
+  isFileUploadedSuccessfully,
+} from "@/utils/files";
 import { fileUploader } from "@/utils/upload";
 import { Response, Request } from "express";
 
-export const updateStudentImageMiddleware = fileUploader(
+const updateStudentImageMiddleware = fileUploader(
   STUDENT_IMG_PATH,
   ALLOWED_IMAGE_TYPES,
   "Student Image Not Updated",
@@ -19,19 +27,29 @@ const studentsUpdate = async (
   next: (err: Error) => void
 ) => {
   try {
-    console.log("--GHId:", req.body);
     const { id } = req.params as {
       id: string;
     };
 
     const reqBody = { ...req.body } as IUpdateStudentBody;
+    const isStudentImgUpdated = isFileUploadedSuccessfully(req);
+    const imgPath = isStudentImgUpdated
+      ? generateFileNameFromRequest({
+          req,
+          baseURL: STUDENT_IMAGE_BASE_URL,
+        })
+      : null;
 
-    console.log("--reqBody: ", reqBody);
-    const response = (await updateStudent({
+    const updateStudentParams = {
       ...reqBody,
       id: Number(id),
       ...(reqBody?.password && { password: encryptPassword(reqBody.password) }),
-    })) as { rows: { id: number }[] };
+      ...(imgPath && { image_url: imgPath }),
+    };
+
+    const response = (await updateStudent(updateStudentParams)) as {
+      rows: { id: number }[];
+    };
 
     const updatedRowID = response?.rows[0]?.id;
 
@@ -45,6 +63,7 @@ const studentsUpdate = async (
         error: null,
         data: {
           updatedID: response.rows,
+          isStudentImgUpdated,
         },
         message: null,
         status: 200,
@@ -55,4 +74,4 @@ const studentsUpdate = async (
   }
 };
 
-export default studentsUpdate;
+export default [updateStudentImageMiddleware, studentsUpdate];
