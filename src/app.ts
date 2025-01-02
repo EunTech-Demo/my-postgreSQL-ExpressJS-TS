@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response } from "express";
+import express from "express";
 import bodyParser from "body-parser";
 
 import usersRouter from "./routers/usersRouter";
@@ -10,36 +10,21 @@ import defaultErrorMiddleware from "@/middlewares/defaultErrorMiddleware";
 const app = express();
 
 // access files via URL : http://localhost:3002/files/images/students/????.jpg
+app.use("/files", (_, __, next) => {
+  console.log("[Static Files] accessing files:", _.url);
+  next();
+});
 app.use("/files", express.static(FILE_PATH));
 
 // Middle wares
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get(
-  "/ping",
-  ...[
-    (_, __, next) => {
-      console.log("ping 1");
-      next();
-    },
-    (_, __, next) => {
-      console.log("ping 2");
-      next();
-    },
-    (_, __, next) => {
-      console.log("ping 3");
-      next();
-    },
-    (_, res, next) => {
-      console.log("ping 4");
-
-      res.send("pong");
-    },
-  ]
-);
-
-// path: /api
+/*
+-- PATHS: 
+  USERS TABLE -> /api/users
+  STUDENTS TABLE -> /api/students
+*/
 app.use(`${PATH_PREFIXES.API}${ROUTES_CONFIG.USERS.baseURL}`, usersRouter);
 app.use(
   `${PATH_PREFIXES.API}${ROUTES_CONFIG.STUDENTS.baseURL}`,
@@ -49,6 +34,6 @@ app.use(
 app.use(defaultErrorMiddleware);
 
 app.listen(PORT, () => {
-  console.log(`[server] Application is listening on port ${PORT}`);
-  console.log('[Server] uploads are located in "' + FILE_PATH + '"');
+  console.log(`[Server] Application is listening on port ${PORT}`);
+  console.log(`[Server] Uploads are located in ${FILE_PATH}`);
 });
