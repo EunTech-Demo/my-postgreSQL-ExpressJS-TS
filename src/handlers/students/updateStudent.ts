@@ -1,6 +1,6 @@
 import { DEFAULT_SCHEMA_NAME } from "@/configs/database";
 import { executeSQLQuery } from "@/database/operations";
-import { IUpdateStudentBody } from "@/interfaces/students.interface";
+import { IUpdateStudentRecord } from "@/interfaces/students.interface";
 
 const SQL = `
 UPDATE ${DEFAULT_SCHEMA_NAME}.students
@@ -12,14 +12,15 @@ SET
     middlename=COALESCE($5, middlename),
     username=COALESCE($6, username),
     password=COALESCE($7, password),
-    is_active=COALESCE($8, is_active)
+    is_active=COALESCE($8, is_active),
+    image_url=COALESCE($9, image_url)
 
 WHERE id = $1
 
-RETURNING *
+RETURNING id,reference_id,firstname,lastname,middlename,username,is_active,image_url
 `;
 
-const updateStudent = async (params: IUpdateStudentBody) => {
+const updateStudent = async (params: IUpdateStudentRecord) => {
   const {
     id,
     reference_id,
@@ -29,6 +30,7 @@ const updateStudent = async (params: IUpdateStudentBody) => {
     username,
     password,
     is_active,
+    image_url,
   } = params;
 
   const updateParams = [
@@ -40,9 +42,9 @@ const updateStudent = async (params: IUpdateStudentBody) => {
     username,
     password,
     is_active,
+    image_url,
   ];
 
-  console.log("params: ", { updateParams });
   const response = executeSQLQuery(SQL, updateParams);
 
   return response;
