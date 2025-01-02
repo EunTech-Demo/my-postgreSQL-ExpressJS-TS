@@ -16,16 +16,9 @@ studentsRouter.use((req, res, next) => {
 });
 
 studentsRouter.get(ROUTES_CONFIG.STUDENTS.paths.GET_ALL, studentsGetList);
-
 studentsRouter.post(
   ROUTES_CONFIG.STUDENTS.paths.CREATE_STUDENT,
-  fileUploader(
-    STUDENT_IMG_PATH,
-    ALLOWED_IMAGE_TYPES,
-    "Student Image Not Uploaded",
-    "username"
-  ).single("image_file"),
-  studentsCreate
+  ...studentsCreate
 );
 
 studentsRouter.put(
