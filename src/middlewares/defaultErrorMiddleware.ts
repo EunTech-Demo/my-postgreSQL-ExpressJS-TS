@@ -8,8 +8,7 @@ const defaultErrorMiddleware = (
     stack: string;
   },
   _: Request,
-  res: Response,
-  next: NextFunction
+  res: Response
 ) => {
   console.error(`[ERROR: defaultErrorMiddleware] ${err}`);
 
