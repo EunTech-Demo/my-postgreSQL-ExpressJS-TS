@@ -1,9 +1,14 @@
 import { ROUTES_CONFIG } from "@/configs/routers.config";
 import { responseJSONTemplate } from "@/utils/api";
 import { Router } from "express";
-import { studentsCreate, studentsGetList } from "./studentsRoutes";
+import {
+  studentsCreate,
+  studentsGetList,
+  studentsUpdate,
+} from "./studentsRoutes";
 import { fileUploader } from "@/utils/upload";
 import { ALLOWED_IMAGE_TYPES, STUDENT_IMG_PATH } from "@/server.config";
+import { updateStudentImageMiddleware } from "./studentsRoutes/studentsUpdate";
 
 const studentsRouter = Router();
 
@@ -23,6 +28,11 @@ studentsRouter.post(
     "username"
   ).single("image_file"),
   studentsCreate
+);
+
+studentsRouter.put(
+  ROUTES_CONFIG.STUDENTS.paths.UPDATE_STUDENT_BY_ID,
+  ...[updateStudentImageMiddleware, studentsUpdate]
 );
 
 export default studentsRouter;
