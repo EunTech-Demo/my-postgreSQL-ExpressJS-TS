@@ -6,3 +6,6 @@
 /lms_system
 /src/public
 /public
+
+# env file
+.env
